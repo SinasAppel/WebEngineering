@@ -7,3 +7,8 @@ def index(request):
     airport_list = Airport.objects.order_by('code')
     output = ', '.join([a.toJSON() for a in airport_list])
     return HttpResponse(output)
+
+
+def statistics(request):
+    output = "Hello"
+    return HttpResponse(output)
