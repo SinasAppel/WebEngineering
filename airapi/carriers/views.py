@@ -7,6 +7,9 @@ def index(request):
     if airport_code:
         return HttpResponse(airport_code)
     else:
-        airport_list = Carrier.objects.order_by('code')
-        output = ', '.join([a.toJSON() for a in airport_list])
+        carrier_list = Carrier.objects.order_by('code')
+        output = []
+        for a in carrier_list:
+            if a.toJSON() not in output:
+                output.append(a.toJSON())
         return HttpResponse(output)
