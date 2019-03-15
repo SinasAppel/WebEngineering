@@ -9,10 +9,8 @@ table_name = 'airports_airport'
 
 for d in data:
     id_number = id_number + 1
-    airport_name = d['airport']['name']
-    airport_code = d['airport']['code']
-    c.execute("INSERT INTO airports_airport "
-              "VALUES (?, ?, ?)", (id_number, airport_name, airport_code))
+    c.execute("INSERT INTO carriers_carrierdata "
+              "VALUES (?, ?, ?, ?, ?)", (id_number, id_number, id_number, id_number, id_number))
 
 conn.commit()
 conn.close()
