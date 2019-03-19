@@ -8,7 +8,11 @@ class Carrier(models.Model):
     code = models.CharField(max_length=3)
     name = models.CharField(max_length=200)
 
-    def toJSON(self):
+    def dump(self):
+        return {"carrier": {'code': self.code,
+                            'name': self.name}}
+
+    def to_json(self):
         data = {'name': self.name, 'code': self.code}
         return json.dumps(data)
 
