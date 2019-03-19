@@ -16,6 +16,9 @@ class Carrier(models.Model):
         data = {'name': self.name, 'code': self.code}
         return json.dumps(data)
 
+    def get_code(self):
+        return self.code
+
 
 class Flights(models.Model):
     cancelled = models.IntegerField()
@@ -59,3 +62,9 @@ class CarrierData(models.Model):
     airport = models.ForeignKey(Airport, on_delete=models.CASCADE)
     statistics = models.ForeignKey(Statistics, on_delete=models.CASCADE)
     time = models.ForeignKey(Time, on_delete=models.CASCADE)
+
+    def get_carrier(self):
+        return self.carrier
+
+    def get_airport(self):
+        return self.airport

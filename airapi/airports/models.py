@@ -13,3 +13,6 @@ class Airport(models.Model):
     def to_json(self):
         data = {'name': self.name, 'code': self.code}
         return json.dumps(data)
+
+    def get_code(self):
+        return self.code
