@@ -33,3 +33,7 @@ def index(request):
         return HttpResponse(content="Error 503: List of carriers cannot be found.", status=503)
 
     return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+
+
+def flights(request, carrier_code):
+    return HttpResponse(carrier_code)
