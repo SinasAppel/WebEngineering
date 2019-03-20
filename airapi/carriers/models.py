@@ -19,6 +19,9 @@ class Carrier(models.Model):
     def get_code(self):
         return self.code
 
+    def get_name(self):
+        return self.name
+
 
 class Flights(models.Model):
     cancelled = models.IntegerField()
@@ -26,6 +29,28 @@ class Flights(models.Model):
     total = models.IntegerField()
     delayed = models.IntegerField()
     diverted = models.IntegerField()
+
+    def dump(self):
+        return {"flights": {'cancelled': self.cancelled,
+                            'on time': self.on_time,
+                            'total': self.total,
+                            'delayed': self.delayed,
+                            'diverted': self.diverted}}
+
+    def get_cancelled(self):
+        return self.cancelled
+
+    def get_on_time(self):
+        return self.on_time
+
+    def get_total(self):
+        return self.total
+
+    def get_delayed(self):
+        return self.delayed
+
+    def get_diverted(self):
+        return self.diverted
 
 
 class Delays(models.Model):
@@ -55,6 +80,24 @@ class Time(models.Model):
     label = models.CharField(max_length=20)
     year = models.IntegerField()
     month = models.IntegerField()
+
+    def to_json(self):
+        data = {'label': self.label}
+        return json.dumps(data)
+
+    def dump(self):
+        return {"time": {'label': self.label,
+                         'year': self.year,
+                         'month': self.month}}
+
+    def get_label(self):
+        return self.label
+
+    def get_year(self):
+        return self.year
+
+    def get_month(self):
+        return self.month
 
 
 class CarrierData(models.Model):
