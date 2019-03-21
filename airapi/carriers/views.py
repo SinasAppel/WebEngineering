@@ -6,7 +6,7 @@ from airports.models import Airport
 from .models import Carrier
 
 
-def index(request):
+def index(request, return_type='json'):
     airport_code = request.GET.get('airport-code', False)
     unique_carriers = []
     carrier_set = []
@@ -32,25 +32,57 @@ def index(request):
     if carrier_set is []:
         return HttpResponse(content="Error 503: List of carriers cannot be found.", status=503)
 
-    return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    if return_type == 'json':
+        return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    else:
+        return HttpResponse(content='CSV response', status=200)
 
 
-def statistics(request, code, airport, month):
+def statistics(request, code, airport, month, return_type='json'):
     carrier_set = []
 
     if carrier_set is []:
         return HttpResponse(content="Error 503: List of carriers cannot be found.", status=503)
 
-    return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    if return_type == 'json':
+        return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    else:
+        return HttpResponse(content='CSV response', status=200)
 
 
-def delays(request, code, airport, month):
+def delays(request, code, airport, month, return_type='json'):
     carrier_set = []
 
     if carrier_set is []:
         return HttpResponse(content="Error 503: List of carriers cannot be found.", status=503)
 
-    return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    if return_type == 'json':
+        return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    else:
+        return HttpResponse(content='CSV response', status=200)
+
+
+def minutes(request, code, reason, airport, month, return_type='json'):
+    carrier_set = []
+
+    if carrier_set is []:
+        return HttpResponse(content="Error 503: List of carriers cannot be found.", status=503)
+    if return_type == 'json':
+        return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    else:
+        return HttpResponse(content='CSV response', status=200)
+
+
+def descriptive(request, airport_a, airport_b, return_type='json'):
+    carrier_set = []
+
+    if carrier_set is []:
+        return HttpResponse(content="Error 503: List of carriers cannot be found.", status=503)
+
+    if return_type == 'json':
+        return JsonResponse(json.dumps([carrier.dump() for carrier in carrier_set]), safe=False, status=200)
+    else:
+        return HttpResponse(content='CSV response', status=200)
 
 
 def time(request):
