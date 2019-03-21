@@ -141,27 +141,42 @@ def minutes(request, carrier_code):
                                'total': self.delays.get_total()}
                     }
 
-
+    airport_code = request.GET.get('airport', False)
     month = int(request.GET.get('month', False))
     year = int(request.GET.get('year', False))
     reason = request.GET.get('reason', False)
 
     stat_list = []
     flight_list = MinutesDelayed.objects.order_by()
+    airports = Airport.objects.order_by()
     carriers = Carrier.objects.order_by()
     time = Time.objects.order_by()
     length = len(carriers)
-    if not month or not year:
-        for i in range(length):
-            if carriers[i].get_code() == carrier_code:
-                s = Stats(flight_list[i])
-                stat_list.append(s)
-    else:
-        for i in range(length):
-            if carriers[i].get_code() == carrier_code:
-                if month == time[i].get_month() and year == time[i].get_year():
+    if not airport_code:
+        if not month or not year:
+            for i in range(length):
+                if carriers[i].get_code() == carrier_code:
                     s = Stats(flight_list[i])
                     stat_list.append(s)
+        else:
+            for i in range(length):
+                if carriers[i].get_code() == carrier_code:
+                    if month == time[i].get_month() and year == time[i].get_year():
+                        s = Stats(flight_list[i])
+                        stat_list.append(s)
+    else:
+        if not month or not year:
+            for i in range(length):
+                if carriers[i].get_code() == carrier_code and airports[i].get_code() == airport_code:
+                    s = Stats(flight_list[i])
+                    stat_list.append(s)
+        else:
+            for i in range(length):
+                if carriers[i].get_code() == carrier_code and airports[i].get_code() == airport_code:
+                    if month == time[i].get_month() and year == time[i].get_year():
+                        s = Stats(flight_list[i])
+                        stat_list.append(s)
+
     if reason == 'carrier':
         return JsonResponse(json.dumps([s.delays.get_carrier() for s in stat_list]), safe=False)
     elif reason == 'late_aircraft':
