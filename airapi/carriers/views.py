@@ -85,8 +85,6 @@ def flights(request, carrier_code):
     return JsonResponse(json.dumps([s.dump() for s in stat_list]), safe=False)
 
 
-
-
 def delays(request, carrier_code):
     class Stats:
         def __init__(self, d):
@@ -141,7 +139,7 @@ def minutes(request, carrier_code):
                                'total': self.delays.get_total()}
                     }
 
-    airport_code = request.GET.get('airport', False)
+    airport_code = request.GET.get('airport-code', False)
     month = int(request.GET.get('month', False))
     year = int(request.GET.get('year', False))
     reason = request.GET.get('reason', False)
