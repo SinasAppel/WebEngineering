@@ -16,3 +16,6 @@ class Airport(models.Model):
 
     def get_code(self):
         return self.code
+
+    def get_name(self):
+        return self.name

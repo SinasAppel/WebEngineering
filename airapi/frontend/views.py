@@ -1,7 +1,6 @@
 from django.shortcuts import render
 import requests
 import json
-from airports.models import Airport
 
 
 def index(request):
@@ -14,9 +13,6 @@ def index(request):
 def airports(request):
     r = requests.get('http://localhost:8000/v1/airports')
     airport_json = json.loads(r.json())
-    for a in airport_json:
-        print(a)
-        print(a['airport'])
 
     context = {
         'airport_list': airport_json,
@@ -29,6 +25,7 @@ def carriers(request):
     context = {
         'active': "Carriers",
     }
+
     return render(request, 'frontend/carriers.html', context)
 
 
@@ -43,6 +40,25 @@ def carrier_statistics(request):
     context = {
         'active': "Carrier Statistics",
     }
+
+    if request.method == 'POST':
+        print("Post method detected")
+        carrier_code = request.POST.get("carrier_code", False)
+        airport_code = request.POST.get("airport_code", False)
+        month = request.POST.get("month", False)
+        year = request.POST.get("year", False)
+        rs = "http://localhost:8000/v1/carriers/statistics/"
+        rs = rs + carrier_code + "/flights"
+        rs = rs + "?airport-code=" + airport_code
+        if year and month:
+            rs = rs + "&year=" + year + "&month=" + month
+        r = requests.get(rs)
+        j = json.loads(r.json())
+        on_time = []
+        for i in range(len(j)):
+            on_time.append(j[i]['flights']['on time'])
+        context['data'] = zip(j, on_time)
+
     return render(request, 'frontend/carrier_statistics.html', context)
 
 
