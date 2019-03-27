@@ -1,4 +1,15 @@
 {% extends 'base.html' %} 
 {% block content %}
-List of airports here (Query 1)
+<h2>
+    Following is a list of airports that is the database:
+</h2>
+
+<ul class="airportlist">
+    {% for airport_json in airport_list %}
+        <li>
+            name: {{airport_json.airport.name}} <br>
+            code: {{airport_json.airport.code}} <br>
+        </li>
+    {% endfor %}
+</ul>
 {% endblock %}

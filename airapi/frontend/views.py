@@ -1,4 +1,7 @@
 from django.shortcuts import render
+import requests
+import json
+from airports.models import Airport
 
 
 def index(request):
@@ -9,7 +12,15 @@ def index(request):
 
 
 def airports(request):
+    r = requests.get('http://localhost:8000/v1/airports')
+    airport_json = json.loads(r.json())
+    airport_list = []
+    for a in airport_json:
+        print(a)
+        print(a['airport'])
+
     context = {
+        'airport_list': airport_json,
         'active': "Airports",
     }
     return render(request, 'frontend/airports.html', context)
