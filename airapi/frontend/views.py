@@ -1,8 +1,6 @@
 from django.shortcuts import render
 import requests
 import json
-from airports.models import Airport
-from carriers.models import  Carrier
 
 def index(request):
     context = {
@@ -25,9 +23,6 @@ def airports(request):
 def carriers(request):
     r = requests.get('http://localhost:8000/v1/carriers')
     carrier_json = json.loads(r.json())
-    for c in carrier_json:
-        print(c)
-        print(c['carrier'])
 
     context = {
         'carrier_list': carrier_json,
