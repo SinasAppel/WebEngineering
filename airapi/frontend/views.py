@@ -69,6 +69,33 @@ def carrier_delays(request):
     context = {
         'active': "Number of Carrier Delays",
     }
+    if request.method == 'POST':
+        carrier_code = request.POST.get("carrier_code", False)
+        airport_code = request.POST.get("airport_code", False)
+        month = request.POST.get("month", False)
+        year = request.POST.get("year", False)
+        rs = "http://localhost:8000/v1/carriers/statistics/"
+        rs = rs + carrier_code + "/flights/delays"
+        rs = rs + "?airport-code=" + airport_code
+        if year and month:
+            rs = rs + "&year=" + year + "&month=" + month
+        r = requests.get(rs)
+        j = json.loads(r.json())
+        len_j = len(j)
+        late_aircraft = []
+        weather = []
+        security = []
+        national_aviation_system = []
+        carrier = []
+        for i in range(len_j):
+            late_aircraft.append(j[i]['delays']['late aircraft'])
+            weather.append(j[i]['delays']['weather'])
+            security.append(j[i]['delays']['security'])
+            national_aviation_system.append(j[i]['delays']['security'])
+            carrier.append(j[i]['delays']['carrier'])
+        data = zip(late_aircraft, weather, security, national_aviation_system, carrier)
+        context['data'] = data
+
     return render(request, 'frontend/number_of_carrier_delays.html', context)
 
 

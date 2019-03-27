@@ -98,6 +98,23 @@ def delays(request, carrier_code):
                                 'carrier': self.delays.get_carrier()}
                     }
 
+    class SummedStats:
+        def __init__(self, la, w, s, nas, c):
+            self.late_aircraft = la
+            self.weather = w
+            self.security = s
+            self.national_aviation_system = nas
+            self.carrier = c
+
+        def dump(self):
+            return {"delays": {'late aircraft': self.late_aircraft,
+                               'weather': self.weather,
+                               'security': self.security,
+                               'national aviation system': self.national_aviation_system,
+                               'carrier': self.carrier}
+                    }
+
+
     airport_code = request.GET.get('airport-code', False)
     month = int(request.GET.get('month', False))
     year = int(request.GET.get('year', False))
@@ -115,6 +132,19 @@ def delays(request, carrier_code):
             if carriers[i].get_code() == carrier_code and airports[i].get_code() == airport_code:
                 s = Stats(flight_list[i])
                 stat_list.append(s)
+        la = 0
+        w = 0
+        s = 0
+        nas = 0
+        c = 0
+        for stat in stat_list:
+            la = la + stat.delays.late_aircraft
+            w = w + stat.delays.weather
+            s = s + stat.delays.security
+            nas = nas + stat.delays.national_aviation_system
+            c = c + stat.delays.carrier
+        stat_list = []
+        stat_list.append(SummedStats(la, w, s, nas, c))
     else:
         for i in range(length):
             if carriers[i].get_code() == carrier_code and airports[i].get_code() == airport_code:
