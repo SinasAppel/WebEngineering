@@ -1,4 +1,55 @@
 {% extends 'base.html' %}
 {% block content %}
-Query 7
+<h3>
+    Return the mean, median and standard deviation for carrier-specific delays for a route, for a specific carrier.
+    The route is denoted by the two respective airports, between airport A and airport B.
+</h3>
+
+<form action="/carriers/delays/statistics" method="post">{% csrf_token %}
+    <p>
+        Airport A: <br>
+        <input type="text" name="airport_a" placeholder="DCA">
+    </p>
+    <p>
+        Airport B: <br>
+        <input type="text" name="airport_b" placeholder="BOS">
+    </p>
+    <p>
+        Carrier Code: <br>
+        <input type="text" name ="carrier_code" placeholder="AA">
+    </p>
+
+    <input type="submit" value="Submit">
+</form>
+
+{% if data %}
+    <ul>
+    {% for a,b,c,mean,median,sd in data %}
+        <li>
+            Airport A: {{a}}
+        </li>
+        <li>
+            Airport B: {{b}}
+        </li>
+        <li>
+            Carrier Code: {{c}}
+        </li>
+        <li>
+            Statistics:
+            <ul>
+                <li>
+                    Mean: {{ mean }}
+                </li>
+                <li>
+                    Median:  {{ median }}
+                </li>
+                <li>
+                    Standard Deviation: {{ sd }}
+                </li>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
 {% endblock %}

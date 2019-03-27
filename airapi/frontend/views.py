@@ -110,4 +110,31 @@ def carrier_delays_statistics(request):
     context = {
         'active': "Statistics of Carrier Delays",
     }
+
+    if request.method == 'POST':
+        airport_a = request.POST.get("airport_a", False)
+        airport_b = request.POST.get("airport_b", False)
+        carrier_code = request.POST.get("carrier_code", False)
+        rs = "http://localhost:8000/v1/airports/statistics/descriptive"
+        rs = rs + "?airport-a=" + airport_a
+        rs = rs + "&airport-b=" + airport_b
+        rs = rs + "&carrier-code=" + carrier_code
+        r = requests.get(rs)
+        j = json.loads(r.json())
+        print(json.dumps(j))
+        airport_a = []
+        airport_b = []
+        carrier_code = []
+        mean = []
+        median = []
+        standard_deviation = []
+        airport_a.append(j['airport-a'])
+        airport_b.append(j['airport-b'])
+        carrier_code.append(j['carrier-code'])
+        mean.append(j['stats']['mean'])
+        median.append(j['stats']['median'])
+        standard_deviation.append(j['stats']['standard-deviation'])
+        data = zip(airport_a, airport_b, carrier_code, mean, median, standard_deviation)
+        context['data'] = data
+
     return render(request, 'frontend/statistics_of_carrier_delays.html', context)
