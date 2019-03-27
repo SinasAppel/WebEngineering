@@ -5,4 +5,5 @@ urlpatterns = [
     path('v1/airports/', include('airports.urls')),
     path('v1/carriers/', include('carriers.urls')),
     path('admin/', admin.site.urls),
+    path('', include('frontend.urls')),
 ]

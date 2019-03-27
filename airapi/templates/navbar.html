@@ -1,0 +1,10 @@
+<ul>
+  <li><a {% if active == "Home" %}class="active"{% endif %} href="/">Home</a></li>
+  <li><a {% if active == "Airports" %}class="active"{% endif %} href="/airports">Airports</a></li>
+  <li><a {% if active == "Carriers" %}class="active"{% endif %} href="/carriers">Carriers</a></li>
+  <li><a {% if active == "Carriers at Airport" %}class="active"{% endif %} href="/carriers/at-airport">Carriers at Airport</a></li>
+  <li><a {% if active == "Carrier Statistics" %}class="active"{% endif %} href="/carriers/statistics">Carrier Statistics</a></li>
+  <li><a {% if active == "Number of Carrier Delays" %}class="active"{% endif %} href="/carriers/delays">Number of Carrier Delays</a></li>
+  <li><a {% if active == "Minutes of Carrier Delays" %}class="active"{% endif %} href="/carriers/delays/minutes">Minutes of Carrier Delays</a></li>
+  <li><a {% if active == "Statistics of Carrier Delays" %}class="active"{% endif %} href="/carriers/delays/statistics">Statistics of Carrier Delays</a></li>
+</ul> 
