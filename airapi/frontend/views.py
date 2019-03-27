@@ -38,16 +38,12 @@ def carriers_at_airport(request):
     }
 
     if request.method == 'POST':
-        print("Post method detected")
         airport_code = request.POST.get("airport_code", False)
         rs = "http://localhost:8000/v1/carriers"
         rs = rs + "?airport-code=" + airport_code
         r = requests.get(rs)
         j = json.loads(r.json())
-        carrier_at_airport_list = []
-        for i in range(len(j)):
-            carrier_at_airport_list.append(j[i]['carrier'])
-        context['data'] = zip(j, carrier_at_airport_list)
+        context['data'] = j
 
     return render(request, 'frontend/carriers_at_airport.html', context)
 

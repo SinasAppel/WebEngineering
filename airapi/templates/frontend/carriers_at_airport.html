@@ -13,10 +13,10 @@
 </form>
 {% if data %}
     <ul class="airportlist">
-        {% for carrier_json in carrier_at_airport_list %}
+        {% for c in data %}
             <li>
-                name: {{carrier_json.carrier.name}} <br>
-                code: {{carrier_json.carrier.code}} <br>
+                name: {{c.carrier.name}} <br>
+                code: {{c.carrier.code}} <br>
             </li>
         {% endfor %}
     </ul>
