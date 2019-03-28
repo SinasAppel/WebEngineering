@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 import requests
 import json
 
@@ -39,6 +40,8 @@ def carriers_at_airport(request):
 
     if request.method == 'POST':
         airport_code = request.POST.get("airport_code", False)
+        if not airport_code:
+            return HttpResponse('Error 400: Failed to give airport code', status=400)
         rs = "http://localhost:8000/v1/carriers"
         rs = rs + "?airport-code=" + airport_code
         r = requests.get(rs)
@@ -56,7 +59,11 @@ def carrier_statistics(request):
     if request.method == 'POST':
         print("Post method detected")
         carrier_code = request.POST.get("carrier_code", False)
+        if not carrier_code:
+            return HttpResponse('Error 400: Failed to give carrier code', status=400)
         airport_code = request.POST.get("airport_code", False)
+        if not airport_code:
+            return HttpResponse('Error 400: Failed to give airport code', status=400)
         month = request.POST.get("month", False)
         year = request.POST.get("year", False)
         rs = "http://localhost:8000/v1/carriers/statistics/"
@@ -80,7 +87,11 @@ def carrier_delays(request):
     }
     if request.method == 'POST':
         carrier_code = request.POST.get("carrier_code", False)
+        if not carrier_code:
+            return HttpResponse('Error 400: Failed to give carrier code', status=400)
         airport_code = request.POST.get("airport_code", False)
+        if not airport_code:
+            return HttpResponse('Error 400: Failed to give airport code', status=400)
         month = request.POST.get("month", False)
         year = request.POST.get("year", False)
         rs = "http://localhost:8000/v1/carriers/statistics/"
@@ -114,7 +125,11 @@ def carrier_delays_minutes(request):
     }
     if request.method == 'POST':
         carrier_code = request.POST.get("carrier_code", False)
+        if not carrier_code:
+            return HttpResponse('Error 400: Failed to give carrier code', status=400)
         airport_code = request.POST.get("airport_code", False)
+        if not airport_code:
+            return HttpResponse('Error 400: Failed to give airport code', status=400)
         reason = request.POST.get("reason", False)
         month = request.POST.get("month", False)
         year = request.POST.get("year", False)
@@ -161,8 +176,14 @@ def carrier_delays_statistics(request):
 
     if request.method == 'POST':
         airport_a = request.POST.get("airport_a", False)
+        if not airport_a:
+            return HttpResponse('Error 400: Failed to give airport code', status=400)
         airport_b = request.POST.get("airport_b", False)
+        if not airport_b:
+            return HttpResponse('Error 400: Failed to give airport code', status=400)
         carrier_code = request.POST.get("carrier_code", False)
+        if not carrier_code:
+            return HttpResponse('Error 400: Failed to give carrier code', status=400)
         rs = "http://localhost:8000/v1/airports/statistics/descriptive"
         rs = rs + "?airport-a=" + airport_a
         rs = rs + "&airport-b=" + airport_b
