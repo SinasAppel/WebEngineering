@@ -47,6 +47,7 @@ def carriers_at_airport(request):
 
     return render(request, 'frontend/carriers_at_airport.html', context)
 
+
 def carrier_statistics(request):
     context = {
         'active': "Carrier Statistics",
@@ -111,6 +112,45 @@ def carrier_delays_minutes(request):
     context = {
         'active': "Minutes of Carrier Delays",
     }
+    if request.method == 'POST':
+        carrier_code = request.POST.get("carrier_code", False)
+        airport_code = request.POST.get("airport_code", False)
+        reason = request.POST.get("reason", False)
+        month = request.POST.get("month", False)
+        year = request.POST.get("year", False)
+        rs = "http://localhost:8000/v1/carriers/statistics/"
+        rs = rs + carrier_code + "/delay-minutes"
+        rs = rs + "?airport-code=" + airport_code
+        if reason:
+            rs = rs + "&reason=" + reason
+        if month and year:
+            rs = rs + "&month=" + month
+            rs = rs + "&year=" + year
+        r = requests.get(rs)
+        j = json.loads(r.json())
+        if reason:
+            data_with_reason = j
+            context['data_with_reason'] = data_with_reason
+            context['reason'] = reason
+        else:
+            len_j = len(j)
+            late_aircraft = []
+            weather = []
+            security = []
+            national_aviation_system = []
+            carrier = []
+            month = []
+            year = []
+            for i in range(len_j):
+                late_aircraft.append(j[i]['delays']['late aircraft'])
+                weather.append(j[i]['delays']['weather'])
+                security.append(j[i]['delays']['security'])
+                national_aviation_system.append(j[i]['delays']['security'])
+                carrier.append(j[i]['delays']['carrier'])
+                month.append(j[i]['time']['month'])
+                year.append(j[i]['time']['month'])
+            data = zip(month, year, late_aircraft, weather, security, national_aviation_system, carrier)
+            context['data'] = data
     return render(request, 'frontend/minutes_of_carrier_delays.html', context)
 
 

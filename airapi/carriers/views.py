@@ -157,17 +157,31 @@ def delays(request, carrier_code):
 
 def minutes(request, carrier_code):
     class Stats:
+        month = 0
+        year = 0
+
         def __init__(self, d):
             self.delays = d
 
         def dump(self):
-            return {"delays": {'late aircraft': self.delays.get_late_aircraft(),
-                               'weather': self.delays.get_weather(),
-                               'security': self.delays.get_security(),
-                               'national aviation system': self.delays.get_national_aviation_system(),
-                               'carrier': self.delays.get_carrier(),
-                               'total': self.delays.get_total()}
-                    }
+            if self.month > 0 and self.year > 0:
+                return {"time":   {'year': self.year,
+                                   'month': self.month},
+                        "delays": {'late aircraft': self.delays.get_late_aircraft(),
+                                   'weather': self.delays.get_weather(),
+                                   'security': self.delays.get_security(),
+                                   'national aviation system': self.delays.get_national_aviation_system(),
+                                   'carrier': self.delays.get_carrier(),
+                                   'total': self.delays.get_total()}
+                        }
+            else:
+                return {"delays": {'late aircraft': self.delays.get_late_aircraft(),
+                                    'weather': self.delays.get_weather(),
+                                    'security': self.delays.get_security(),
+                                    'national aviation system': self.delays.get_national_aviation_system(),
+                                    'carrier': self.delays.get_carrier(),
+                                    'total': self.delays.get_total()}
+                        }
 
     airport_code = request.GET.get('airport-code', False)
     month = int(request.GET.get('month', False))
@@ -185,24 +199,32 @@ def minutes(request, carrier_code):
             for i in range(length):
                 if carriers[i].get_code() == carrier_code:
                     s = Stats(flight_list[i])
+                    s.month = time[i].get_month()
+                    s.year = time[i].get_year()
                     stat_list.append(s)
         else:
             for i in range(length):
                 if carriers[i].get_code() == carrier_code:
                     if month == time[i].get_month() and year == time[i].get_year():
                         s = Stats(flight_list[i])
+                        s.month = month
+                        s.year = year
                         stat_list.append(s)
     else:
         if not month or not year:
             for i in range(length):
                 if carriers[i].get_code() == carrier_code and airports[i].get_code() == airport_code:
                     s = Stats(flight_list[i])
+                    s.month = time[i].get_month()
+                    s.year = time[i].get_year()
                     stat_list.append(s)
         else:
             for i in range(length):
                 if carriers[i].get_code() == carrier_code and airports[i].get_code() == airport_code:
                     if month == time[i].get_month() and year == time[i].get_year():
                         s = Stats(flight_list[i])
+                        s.month = month
+                        s.year = year
                         stat_list.append(s)
 
     if reason == 'carrier':
