@@ -1,0 +1,56 @@
+{% extends 'base.html' %} 
+{% block content %}
+<h3>
+    This page will display the number delays of a given carrier on a given airport. <br>
+    These numbers are split up in different categories, depending on the reason of the delay <br>
+    Year and Month can also be given, but these are not required <br>
+</h3>
+
+<form action="/carriers/delays" method="post">{% csrf_token %}
+    <p>
+        Carrier code: <br>
+        <input type="text" name="carrier_code" placeholder="AA">
+    </p>
+    <p>
+        Airport code: <br>
+        <input type="text" name="airport_code" placeholder="BOS">
+    </p>
+    <p>
+        Month: <br>
+        <input type="number" name ="month" min="1" max="12" placeholder="1">
+    </p>
+    <p>
+        Year: <br>
+        <input type="number" name="year" min="2003" max="2016" placeholder="2003">
+    </p>
+
+    <input type="submit" value="Submit">
+</form>
+
+{% if data %}
+    <ul>
+    {% for la,w,s,nas,c in data %}
+        <li>
+            Statistics:
+            <ul>
+                <li>
+                    Late Aircraft: {{ la }}
+                </li>
+                <li>
+                   Weather:  {{ w }}
+                </li>
+                <li>
+                    Security delays: {{ s }}
+                </li>
+                <li>
+                    National Aviation System:  {{ nas }}
+                </li>
+                <li>
+                    By Carrier: {{ c }}
+                </li>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

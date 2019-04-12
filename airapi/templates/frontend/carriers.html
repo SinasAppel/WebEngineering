@@ -1,0 +1,15 @@
+{% extends 'base.html' %} 
+{% block content %}
+<h2>
+    Following is a list of unique carriers currently in the database
+</h2>
+
+<ul class="airportlist">
+    {% for carrier_json in carrier_list %}
+        <li>
+            name: {{carrier_json.carrier.name}} <br>
+            code: {{carrier_json.carrier.code}} <br>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
