@@ -1,0 +1,67 @@
+{% extends 'base.html' %} 
+{% block content %}
+<h3>
+    This page will display the statistics of a given carrier on a given airport. <br>
+    Year and Month can also be given, but these are not required <br>
+</h3>
+<form action="/carriers/statistics" method="post">{% csrf_token %}
+    <p>
+        Carrier code: <br>
+        <input type="text" name="carrier_code" placeholder="AA">
+    </p>
+    <p>
+        Airport code: <br>
+        <input type="text" name="airport_code" placeholder="BOS">
+    </p>
+    <p>
+        Month: <br>
+        <input type="number" name ="month" min="1" max="12" placeholder="1">
+    </p>
+    <p>
+        Year: <br>
+        <input type="number" name="year" min="2003" max="2016" placeholder="2003">
+    </p>
+
+    <input type="submit" value="Submit">
+</form>
+{% if data %}
+    <ul class="airportlist">
+    {% for d,ontime in data %}
+        <li>
+            Statistics:
+            <ul>
+                <li>
+                    Cancelled: {{d.flights.cancelled}} <br>
+                    On time:  {{ontime}} <br>
+                    Total: {{d.flights.total}} <br>
+                    Delayed: {{d.flights.delayed}} <br>
+                    Diverted: {{d.flights.diverted}} <br>
+                </li>
+                <li>
+                    On Airport:
+                    <ul>
+                        <li>
+                            Name: {{d.airport.name}} <br>
+                        </li>
+                        <li>
+                            Code: {{d.airport.code}} <br>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    With Carrier:
+                    <ul>
+                        <li>
+                            Name: {{d.carrier.name}} <br>
+                        </li>
+                        <li>
+                            Code: {{d.carrier.code}} <br>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

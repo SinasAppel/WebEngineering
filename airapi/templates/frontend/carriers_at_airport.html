@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>
+    Following is a list of all carriers operating at a given airport
+</h2>
+<form action="/carriers/at-airport" method="post">{% csrf_token %}
+    <p>
+        Airport code: <br>
+        <input type="text" name="airport_code" placeholder="BOS">
+    </p>
+
+    <input type="submit" value="Submit">
+</form>
+{% if data %}
+    <ul class="airportlist">
+        {% for c in data %}
+            <li>
+                name: {{c.carrier.name}} <br>
+                code: {{c.carrier.code}} <br>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

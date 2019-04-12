@@ -1,0 +1,82 @@
+{% extends 'base.html' %} 
+{% block content %}
+<h3>
+    This page will display the time in minutes of  delays of a given carrier on a given airport. <br>
+    These numbers are split up in different categories, depending on the reason of the delay <br>
+    Year and Month can also be given, but these are not required <br>
+    If you only want to see a specific reason, this can optionally be specified <br>
+</h3>
+<form action="/carriers/delays/minutes" method="post">{% csrf_token %}
+    <p>
+        Carrier code: <br>
+        <input type="text" name="carrier_code" placeholder="AA">
+    </p>
+    <p>
+        Airport code: <br>
+        <input type="text" name="airport_code" placeholder="BOS">
+    </p>
+    <p>
+        Reason: <br>
+        <input type="text" name="reason" placeholder="carrier">
+    </p>
+    <p>
+        Month: <br>
+        <input type="number" name ="month" min="1" max="12" placeholder="1">
+    </p>
+    <p>
+        Year: <br>
+        <input type="number" name="year" min="2003" max="2016" placeholder="2003">
+    </p>
+
+    <input type="submit" value="Submit">
+</form>
+
+{% if data %}
+    <ul>
+    {% for m,y,la,w,s,nas,c in data %}
+        <li>
+            Time:
+            <ul>
+                <li>
+                    Month: {{ m }}
+                </li>
+                <li>
+                    Year: {{ y }}
+                </li>
+            </ul>
+            Statistics:
+            <ul>
+                <li>
+                    Late Aircraft: {{ la }}
+                </li>
+                <li>
+                   Weather:  {{ w }}
+                </li>
+                <li>
+                    Security delays: {{ s }}
+                </li>
+                <li>
+                    National Aviation System:  {{ nas }}
+                </li>
+                <li>
+                    By Carrier: {{ c }}
+                </li>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% if data_with_reason %}
+    <p>
+        Delays in minutes because of reason: {{ reason }}
+    </p>
+    <ul>
+        {% for i in data_with_reason %}
+        <li>
+            {{ i }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
